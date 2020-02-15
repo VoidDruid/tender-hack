@@ -9,7 +9,7 @@ from formatter import format_excel
 from . import api
 
 
-def load_values_as_array(file) -> List:
+def load_values_as_array(file: BytesIO) -> List:
     elements = []
     wb = load_workbook(filename=file)
     active_sheet = wb.active
@@ -26,36 +26,10 @@ def load_values_as_array(file) -> List:
                 break
     return elements
 
-test_instruction = [
-    None,
-    None,
-    None,
-    None,
-    {
-        "name": "products",
-        "type": "array",
-        "fields": [
-            {
-                "name": "number",
-                "index": 0
-            },
-            {
-                "name": "code",
-                "index": 1
-            },
-            {
-                "name": "name",
-                "index": 1
-            }
-        ]
-    }
-]
-
 
 @api.post('/format_excel', responses=responses)
 def format_excel_to_yml(id: int, file: UploadFile = File(...)):
     elements = load_values_as_array(BytesIO(file.file.read()))
+    # TODO, FIXME: get instruction from mongo by id
 
-    instructions = test_instruction  # TODO, FIXME: get instruction from mongo by id
-
-    return format_excel(elements, instructions)
+    return format_excel(elements, [])

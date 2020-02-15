@@ -1,3 +1,9 @@
-.docker_data
+# Env
+.env
+
+# IDEs
 .vscode
 .idea
+
+# Docker volumes
+.docker_data

@@ -1,7 +1,7 @@
 resolver: lts-14.8
 
 packages:
-- .
+  - .
 
-# extra-deps:
-# -
+extra-deps:
+  - mongoDB-2.7.0.0

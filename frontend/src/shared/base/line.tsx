@@ -8,6 +8,7 @@ interface Props {
   wrap?: boolean;
   justifyContent?: 'start' | 'end' | 'center' | 'between' | 'around';
   alignItems?: 'start' | 'end' | 'center' | 'baseline' | 'stretch';
+  onClick?: (value: any) => any;
 }
 
 export const Line: React.FC<Props> = ({

@@ -1,0 +1,36 @@
+import React, { useState } from 'react';
+import { Line } from 'shared/base/line';
+import { Icon } from 'shared/base/icon';
+import { OptionsType } from 'data/model';
+import { OptionsPanel } from 'app/optionsPanel';
+
+import './itemCard.scss';
+
+interface Props {
+  onDelete: () => void;
+  onAddOptions: (options: OptionsType) => void;
+}
+
+export const ItemCard: React.FC<Props> = ({ onDelete, children, onAddOptions }) => {
+  const [showTip, setShowTip] = useState(true);
+  return (
+    <Line className="card itemCard" justifyContent="between" alignItems="center">
+      <Line vertical>
+        <div>{children}</div>
+        {showTip && (
+          <div
+            className="options"
+            onClick={() => {
+              setShowTip(false);
+            }}>
+            Задать параметры
+          </div>
+        )}
+        {!showTip && <OptionsPanel hideOptions={() => setShowTip(true)}></OptionsPanel>}
+      </Line>
+      <div className="icon">
+        <Icon name="times" onClick={onDelete}></Icon>
+      </div>
+    </Line>
+  );
+};

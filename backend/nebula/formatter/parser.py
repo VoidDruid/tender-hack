@@ -26,13 +26,38 @@ def getter(attribute: str):
     return lambda obj: obj.get(attribute)
 
 
-get_fields, get_name, get_type, get_index, get_is_multiple, get_is_optional = [
-    getter(attr) for attr in ['fields', 'name', 'type', 'index', 'is_multiple', 'is_optional',]
-]
-
 FILLED_TRANSFERED_FLAG = '_is_filled_transfered'
+OUTPUT_FIELD_KEYS = '_outputs'
+TO_REMOVE = '_to_remove'
+SYSTEM_FIELDS = [FILLED_TRANSFERED_FLAG, OUTPUT_FIELD_KEYS, TO_REMOVE]
 TRANSFERED_FIELDS = [
     'is_param',
+]
+
+
+(
+    get_fields,
+    get_name,
+    get_type,
+    get_index,
+    get_is_multiple,
+    get_is_optional,
+    get_output,
+    get_to_remove,
+    get_output_keys,
+) = [
+    getter(attr)
+    for attr in [
+        'fields',
+        'name',
+        'type',
+        'index',
+        'is_multiple',
+        'is_optional',
+        'output',
+        TO_REMOVE,
+        OUTPUT_FIELD_KEYS,
+    ]
 ]
 
 
@@ -54,12 +79,39 @@ def next_entitiy_schema(entity_schemas):
     return schema, check_function
 
 
+def clear_specified_fields(object, fields_list):
+    for system_field in fields_list:
+        object.pop(system_field, None)
+
+
+def build_output_field(params):
+    values = params.pop('values')
+    method = params.pop('method')
+    if not method:
+        value = str(values)
+    if method.endswith('join'):
+        join_around = method.split('-')[0]
+        value = join_around.join([str(value) for value in values])
+    if method == 'concat':
+        value = ''.join([str(value) for value in values])
+    result = params.copy()
+    result['value'] = value
+    return result
+
+
 def extract(parsing_context, schema):
     if not parsing_context or not schema:
         return None
-    entity = deepcopy(parsing_context)  # TODO
+    entity = deepcopy(parsing_context)
     # TODO: support multiple extraction
-    return entity  
+    outputs = get_output_keys(entity)
+    for field_name, params in outputs.items():
+        entity[field_name] = build_output_field(params)
+    clear_specified_fields(entity, get_to_remove(entity) or [])
+    clear_specified_fields(entity, SYSTEM_FIELDS)
+    for field_key in entity:
+        clear_specified_fields(entity[field_key], SYSTEM_FIELDS)
+    return entity
 
 
 def fill_transfered_fields(rendered_field, field):
@@ -69,6 +121,25 @@ def fill_transfered_fields(rendered_field, field):
     for field_name in TRANSFERED_FIELDS:
         if field_name in field:
             rendered_field[field_name] = field[field_name]
+
+
+def set_outputs(parsing_context, field, value):
+    output = get_output(field)
+    if not output:
+        return
+    if OUTPUT_FIELD_KEYS not in parsing_context:
+        parsing_context[OUTPUT_FIELD_KEYS] = {}
+    to = output['to']
+    method = output.get('method')
+    if to in parsing_context[OUTPUT_FIELD_KEYS]:
+        parsing_context[OUTPUT_FIELD_KEYS][to]['values'].append(value)
+    else:
+        parsing_context[OUTPUT_FIELD_KEYS][to] = {'values': [value], 'method': method}
+    fill_transfered_fields(parsing_context[OUTPUT_FIELD_KEYS][to], field)
+    if TO_REMOVE in parsing_context:
+        parsing_context[TO_REMOVE].append(get_name(field))
+    else:
+        parsing_context[TO_REMOVE] = [get_name(field)]
 
 
 def process_row(row: list, schema: dict, parsing_context: dict):
@@ -105,6 +176,7 @@ def process_row(row: list, schema: dict, parsing_context: dict):
                 parsing_context[name]['value'].append(value)
             else:
                 parsing_context[name] = {'value': [value]}
+        set_outputs(parsing_context, field, value)
         fill_transfered_fields(parsing_context[name], field)
     return entity
 

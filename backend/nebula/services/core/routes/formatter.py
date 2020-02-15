@@ -29,10 +29,13 @@ def load_values_as_array(file: BytesIO) -> List:
 
 
 @api.post('/format_excel', responses=responses)
-def format_excel_to_yml(id: int, file: UploadFile = File(...)):
+def format_excel_to_yml(id: int, file: UploadFile = File(...), db: Database = Depends(get_db)):
     elements = load_values_as_array(BytesIO(file.file.read()))
 
-    instructions = test_instruction  # TODO, FIXME: get instruction from mongo by id
+    try:
+        instructions =  db.find_one({"user_id": str(id)})['instructions']
+    except TypeError:
+        return Error("Invalid user id")
 
     return format_excel(elements, instructions)
 
@@ -49,7 +52,7 @@ def save_instructions(id: int, instructions: List, db: Database = Depends(get_db
 
 
 @api.get('/instructions', responses=responses)
-def instructions_list(id: int, db: Database = Depends(get_db)):
+def get_instructions(id: int, db: Database = Depends(get_db)):
     try:
         return db.find_one({"user_id": str(id)})['instructions']
     except TypeError:

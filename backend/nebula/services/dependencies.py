@@ -10,7 +10,7 @@ def get_db():
         print(DB_URI)
         client = MongoClient(DB_URI)
         db = client[db_settings.DATABASE_NAME]
-        yield db
+        yield db[' clients']
     finally:
         if client:
             client.close()

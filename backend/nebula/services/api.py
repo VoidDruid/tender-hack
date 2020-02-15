@@ -30,6 +30,8 @@ class Api(APIRouter):
 def Error(error: Union[str, Dict, List, Tuple], code: int = 400) -> UJSONResponse:  # noqa
     return UJSONResponse(status_code=code, content=ErrorResponse(ok=False, error=error).dict())
 
+def OK(error: Union[str, Dict, List, Tuple], code: int = 200) -> UJSONResponse:  # noqa
+    return UJSONResponse(status_code=code, content=ErrorResponse(ok=True).dict())
 
 PermissionsError = partial(Error, code=403)
 NotFoundError = partial(Error, code=404)

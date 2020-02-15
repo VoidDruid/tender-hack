@@ -1,0 +1,4 @@
+export enum ActionType {
+  CORE_LOADER = 'CORE_LOADER',
+  CORE_RESET_STATE = 'CORE_RESET_STATE'
+}

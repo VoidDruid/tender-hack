@@ -27,7 +27,7 @@ services:
     depends_on:
       - database
   database:
-    container_name: tender-hack-postgres
+    container_name: tender-hack-mongo
     image: mongo
     ports:
       - "27017:27017"

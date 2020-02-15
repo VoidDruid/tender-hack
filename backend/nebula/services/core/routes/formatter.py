@@ -4,7 +4,7 @@ from io import BytesIO
 from fastapi import Depends, File, Header, UploadFile
 from openpyxl import load_workbook
 
-from services.api import responses, OK
+from services.api import responses, OK, Error
 from formatter import format_excel
 from . import api
 from services.dependencies import get_db
@@ -64,6 +64,19 @@ def format_excel_to_yml(id: int, file: UploadFile = File(...)):
 
 @api.post('/instructions', responses=responses)
 def save_instructions(id: int, instructions: List, db: Database = Depends(get_db)):
-    db.insert_one({"user_id": str(id), "instructions": instructions})
+    ent = db.find_one({"user_id": str(id)})
+    if ent is not None:
+        db.update_one({ "_id": ent['_id']} , { "$set": {"user_id": str(id), "instructions": instructions} }) 
+    else:
+        db.insert_one({"user_id": str(id), "instructions": instructions})
     print(instructions)
     return OK(None)
+
+
+@api.get('/instructions', responses=responses)
+def instructions_list(id: int, db: Database = Depends(get_db)):
+    try:
+        return db.find_one({"user_id": str(id)})['instructions']
+    except TypeError:
+        return Error("Invalid user id")
+    

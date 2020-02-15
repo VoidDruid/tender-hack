@@ -3,7 +3,7 @@
     null,
     null,
     null,
-    {
+    {                  
         "name": "offers",
         "type": "array",
         "fields": [

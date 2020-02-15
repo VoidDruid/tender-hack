@@ -1,4 +1,5 @@
 from collections import defaultdict
+from copy import deepcopy
 from pprint import pprint
 
 from conf import DEBUG
@@ -25,8 +26,13 @@ def getter(attribute: str):
     return lambda obj: obj.get(attribute)
 
 
-(get_fields, get_name, get_type, get_index, get_is_multiple, get_is_optional,) = [
+get_fields, get_name, get_type, get_index, get_is_multiple, get_is_optional = [
     getter(attr) for attr in ['fields', 'name', 'type', 'index', 'is_multiple', 'is_optional',]
+]
+
+FILLED_TRANSFERED_FLAG = '_is_filled_transfered'
+TRANSFERED_FIELDS = [
+    'is_param',
 ]
 
 
@@ -51,8 +57,18 @@ def next_entitiy_schema(entity_schemas):
 def extract(parsing_context, schema):
     if not parsing_context or not schema:
         return None
+    entity = deepcopy(parsing_context)  # TODO
     # TODO: support multiple extraction
-    return parsing_context.copy()  # TODO
+    return entity  
+
+
+def fill_transfered_fields(rendered_field, field):
+    if rendered_field.get(FILLED_TRANSFERED_FLAG, False):
+        return
+    rendered_field[FILLED_TRANSFERED_FLAG] = True
+    for field_name in TRANSFERED_FIELDS:
+        if field_name in field:
+            rendered_field[field_name] = field[field_name]
 
 
 def process_row(row: list, schema: dict, parsing_context: dict):
@@ -82,13 +98,14 @@ def process_row(row: list, schema: dict, parsing_context: dict):
         value = row[index]
         is_multiple = get_is_multiple(field)
         if not is_multiple:
-            parsing_context[name] = value
+            if name not in parsing_context:
+                parsing_context[name] = {'value': value}
         else:
             if name in parsing_context:
-                parsing_context[name].append(value)
+                parsing_context[name]['value'].append(value)
             else:
-                parsing_context[name] = [value]
-
+                parsing_context[name] = {'value': [value]}
+        fill_transfered_fields(parsing_context[name], field)
     return entity
 
 

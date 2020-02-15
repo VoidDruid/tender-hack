@@ -1,0 +1,21 @@
+[
+    {
+        "name": "products",
+        "type": "array",
+        "fields": [
+            {
+                "name": "name",
+                "index": 0
+            },
+            {
+                "name": "description",
+                "index": 1
+            }
+        ]
+    },
+    {
+        "name": "price",
+        "type": "single",
+        "eval": "float(row[2])"
+    }
+]

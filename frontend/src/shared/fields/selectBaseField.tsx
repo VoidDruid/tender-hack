@@ -139,7 +139,7 @@ export const SelectBaseField = <TOption extends object | string | number>({
           <div className="icons">
             {admitEmptyOption && (
               <div className="cross" onClick={() => onSelectCallback(' ')}>
-                <Icon name="angle-right" className="icon"></Icon>
+                <Icon name="times" className="icon"></Icon>
               </div>
             )}
             {multiselect && options?.size > 0 && (
@@ -149,7 +149,7 @@ export const SelectBaseField = <TOption extends object | string | number>({
                 {<Icon name={value?.length != 0 ? 'times' : 'arrow-right'} className="icon"></Icon>}
               </div>
             )}
-            <Icon name="angle-right" className="icon"></Icon>
+            <Icon name="angle-down" className="icon"></Icon>
           </div>
         </Line>
         {show && (

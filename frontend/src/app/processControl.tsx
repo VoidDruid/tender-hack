@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Line } from 'shared/base/line';
 import { TextBoxField } from 'shared/fields/textBoxField';
 import { Button } from 'shared/base/button';
@@ -11,6 +11,10 @@ export const ProcessControl: React.FC = () => {
   type ModelType = { [key: string]: OptionsType };
   const [model, setModel] = useState<ModelType>({});
   const [name, setName] = useState<string>();
+
+  const headers = useMemo(() => {
+    return Object.keys(model);
+  }, [model]);
 
   return (
     <Line className="processControl">
@@ -31,10 +35,11 @@ export const ProcessControl: React.FC = () => {
               }
             }}></Button>
         </Line>
-        <Line vertical>
+        <Line vertical className="list">
           <List
+            headers={headers}
             options={model}
-            onAddOptions={(key:string, options: OptionsType) => {}}
+            onAddOptions={(key: string, options: OptionsType) => setModel({ ...model, [key]: options })}
             onDelete={(key: string) => {
               const newModel = { ...model };
               delete newModel[key];

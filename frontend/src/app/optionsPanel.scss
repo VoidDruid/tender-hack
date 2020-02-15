@@ -1,8 +1,12 @@
 .optionsPanel {
+  width: 100%;
   .hideTip {
     cursor: pointer;
   }
   .hideTip:hover {
     color: blue;
+  }
+  .select {
+    width: 100%;
   }
 }

@@ -7,6 +7,7 @@ import { faAngleRight } from '@fortawesome/free-solid-svg-icons/faAngleRight';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -18,7 +19,8 @@ library.add(
   //solid
   faAngleRight,
   faArrowRight,
-  faTimes
+  faTimes,
+  faAngleDown
 );
 
 export type ImportedIcon =
@@ -29,9 +31,9 @@ export type ImportedIcon =
   | 'vk'
   | 'twitter'
   | 'arrow-right'
+  | 'times'
   | 'upload'
-  | 'arrow-right'
-  | 'times';
+  | 'angle-down';
 
 export interface Props extends React.HTMLAttributes<any> {
   className?: string;

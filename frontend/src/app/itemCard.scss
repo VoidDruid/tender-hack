@@ -1,13 +1,19 @@
 .itemCard {
   margin: 0.5em;
   padding: 1em;
-  width: 50%;
-  .options {
-    cursor: pointer;
-    color: #808080;
-  }
-  .options:hover {
-    color: blue;
+  width: 80%;
+  .content {
+    width: 100%;
+    .children {
+      width: 100%;
+    }
+    .options {
+      cursor: pointer;
+      color: #808080;
+    }
+    .options:hover {
+      color: blue;
+    }
   }
   .icon {
     cursor: pointer;

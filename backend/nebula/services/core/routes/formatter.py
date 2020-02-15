@@ -1,31 +1,12 @@
-from . import api
-from fastapi import Depends, File, Header, UploadFile
-from services.api import responses
-from openpyxl import load_workbook
-from io import BytesIO
 from typing import List
+from io import BytesIO
 
-g_instructions = [
-    {
-        "name": "products",
-        "type": "array",
-        "fields": [
-            {
-                "name": "name",
-                "index": 0
-            },
-            {
-                "name": "description",
-                "index": 1
-            }
-        ]
-    },
-    {
-        "name": "price",
-        "type": "single",
-        "eval": "float(row[1])"
-    }
-]
+from fastapi import Depends, File, Header, UploadFile
+from openpyxl import load_workbook
+
+from services.api import responses
+from formatter import format_excel
+from . import api
 
 
 def load_values_as_array(file) -> List:
@@ -35,7 +16,7 @@ def load_values_as_array(file) -> List:
     max_row = active_sheet.max_row
     max_col = active_sheet.max_column
 
-    for r in range(2, max_row + 1):
+    for r in range(1, max_row + 1):
         element = []
         for c in range(1, max_col + 1):
             element.append(active_sheet.cell(row=r, column=c).value)
@@ -45,15 +26,36 @@ def load_values_as_array(file) -> List:
                 break
     return elements
 
+test_instruction = [
+    None,
+    None,
+    None,
+    None,
+    {
+        "name": "products",
+        "type": "array",
+        "fields": [
+            {
+                "name": "number",
+                "index": 0
+            },
+            {
+                "name": "code",
+                "index": 1
+            },
+            {
+                "name": "name",
+                "index": 1
+            }
+        ]
+    }
+]
 
-@api.get('/formatter', response_model=responses)
-def events_list(id: int, file: UploadFile = File(...)):
-    # get instructions from DB by ID
-    instructions = g_instructions
 
+@api.post('/format_excel', responses=responses)
+def format_excel_to_yml(id: int, file: UploadFile = File(...)):
     elements = load_values_as_array(BytesIO(file.file.read()))
-    return elements
 
+    instructions = test_instruction  # TODO, FIXME: get instruction from mongo by id
 
-elements =  load_values_as_array('test.xlsx')
-print(len(elements), elements)
+    return format_excel(elements, instructions)

@@ -1,5 +1,7 @@
 from typing import Generator
+
 from pymongo import MongoClient
+
 from conf import DB_URI, db_settings
 
 

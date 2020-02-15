@@ -25,21 +25,9 @@ def getter(attribute: str):
     return lambda obj: obj.get(attribute)
 
 
-(
-    get_fields,
-    get_name,
-    get_type,
-    get_index,
-    get_is_multiple,
-    get_is_optional,
-) = [getter(attr) for attr in [
-    'fields',
-    'name',
-    'type',
-    'index',
-    'is_multiple',
-    'is_optional',
-]]
+(get_fields, get_name, get_type, get_index, get_is_multiple, get_is_optional,) = [
+    getter(attr) for attr in ['fields', 'name', 'type', 'index', 'is_multiple', 'is_optional',]
+]
 
 
 def create_check_function(schema):
@@ -50,6 +38,7 @@ def create_check_function(schema):
             if not get_is_optional(field) and row[get_index(field)] is None:
                 return False
         return True
+
     return check
 
 
@@ -145,7 +134,7 @@ def format_excel(matrix, instructions):
     if len(instructions) == 0:
         return None  # what to return?
 
-    entities = parse_entities(matrix, instructions)    
+    entities = parse_entities(matrix, instructions)
     print(entities)
 
     return None  # return file

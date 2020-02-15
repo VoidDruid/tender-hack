@@ -25,19 +25,29 @@ def getter(attribute: str):
     return lambda obj: obj.get(attribute)
 
 
-get_fields, get_name, get_type, get_index, get_is_multiple = [getter(attr) for attr in [
+(
+    get_fields,
+    get_name,
+    get_type,
+    get_index,
+    get_is_multiple,
+    get_is_optional,
+) = [getter(attr) for attr in [
     'fields',
     'name',
     'type',
     'index',
-    'is_multiple'
+    'is_multiple',
+    'is_optional',
 ]]
 
 
-def create_check_function(entity_schema):
+def create_check_function(schema):
     def check(row, parsing_context):
-        for field in get_fields(entity_schema):
-            if row[get_index(field)] is None:
+        if not schema:
+            return False
+        for field in get_fields(schema):
+            if not get_is_optional(field) and row[get_index(field)] is None:
                 return False
         return True
     return check
@@ -57,7 +67,9 @@ def extract(parsing_context, schema):
 
 
 def process_row(row: list, schema: dict, parsing_context: dict):
-    # Если заполнено любое из не is_multiple полей - extract
+    if not schema:
+        return None
+
     entity = None
 
     for field in get_fields(schema):
@@ -108,12 +120,16 @@ def parse_entities(matrix, instructions):
 
         if not check_match(row, parsing_context):
             print('SCHEMA MISMATCH')
+            last_schema = current_schema
+            add(current_schema, extract(parsing_context, last_schema))
+            parsing_context.clear()
             try:
-                add(current_schema, extract(parsing_context, current_schema))
                 current_schema, check_match = next_entitiy_schema(entity_schemas)
-                parsing_context.clear()
             except StopIteration:
                 break
+            if not last_schema:
+                print('SKIPPING EMPTY SCHEMA')
+                continue
 
         add(current_schema, process_row(row, current_schema, parsing_context))
 
@@ -128,7 +144,7 @@ def parse_entities(matrix, instructions):
 def format_excel(matrix, instructions):
     if len(instructions) == 0:
         return None  # what to return?
-    
+
     entities = parse_entities(matrix, instructions)    
     print(entities)
 

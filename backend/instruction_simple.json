@@ -39,7 +39,7 @@
                 "index": 6,
                 "output": {
                     "to": "dimensions",
-                    "method": "'x'.join",
+                    "method": "'x'.join"
                 }
             },
             {
@@ -47,7 +47,7 @@
                 "index": 7,
                 "output": {
                     "to": "dimensions",
-                    "method": "'x'.join",
+                    "method": "'x'.join"
                 }
             },
             {
@@ -55,7 +55,7 @@
                 "index": 8,
                 "output": {
                     "to": "dimensions",
-                    "method": "'x'.join",
+                    "method": "'x'.join"
                 }
             },
             {

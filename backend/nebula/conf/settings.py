@@ -1,5 +1,6 @@
 # pylint: disable=W0401,C0413,W0614
 
+from conf.envs.prod import *  # isort: ignore
 import os
 from typing import Optional
 
@@ -15,7 +16,6 @@ class Level:
 RUN_LEVEL = os.getenv('RUN_LEVEL', Level.LOCAL)
 
 DEBUG = False
-from conf.envs.prod import *  # isort: ignore
 
 if RUN_LEVEL in (Level.DEV, Level.LOCAL):
     from conf.envs.dev import *  # isort: ignore
@@ -50,11 +50,8 @@ def make_db_uri(
     password: str = db_settings.DATABASE_PASSWORD,
     host: str = db_settings.DATABASE_HOST,
     port: str = db_settings.DATABASE_PORT,
-    db: Optional[str] = db_settings.DATABASE_NAME,
 ) -> str:
-    connection_string = f'postgresql+psycopg2://{user}:{password}@{host}:{port}'
-    if db:
-        connection_string += f'/{db}'
+    connection_string = f'mongodb://{user}:{password}@{host}:{port}'
     return connection_string
 
 

@@ -1,0 +1,91 @@
+[
+    null,
+    null,
+    null,
+    null,
+    {
+        "name": "offers",
+        "type": "array",
+        "fields": [
+            {
+                "name": "id",
+                "index": 0
+            },
+            {
+                "name": "name",
+                "index": 1
+            },
+            {
+                "name": "vendor",
+                "index": 2
+            },
+            {
+                "name": "Страна происхождения",
+                "is_param": true,
+                "index": 3
+            },
+            {
+                "name": "Вид продукции",
+                "is_param": true,
+                "index": 4
+            },
+            {
+                "name": "Вид товаров",
+                "is_param": true,
+                "index": 5
+            },
+            {
+                "name": "Ширина",
+                "index": 6,
+                "output": {
+                    "to": "dimensions",
+                    "method": "'x'.join",
+                }
+            },
+            {
+                "name": "Длина",
+                "index": 7,
+                "output": {
+                    "to": "dimensions",
+                    "method": "'x'.join",
+                }
+            },
+            {
+                "name": "Высота",
+                "index": 8,
+                "output": {
+                    "to": "dimensions",
+                    "method": "'x'.join",
+                }
+            },
+            {
+                "name": "Материал",
+                "index": 9,
+                "is_param": true
+            },
+            {
+                "name": "Диаметр",
+                "index": 10,
+                "is_param": true
+            },
+            {
+                "name": "expiry",
+                "index": 11
+            },
+            {
+                "name": "Цвет",
+                "index": 12,
+                "is_param": true
+            },
+            {
+                "name": "weight",
+                "index": 13
+            },
+            {
+                "name": "Объем",
+                "index": 14,
+                "is_param": true
+            }
+        ]
+    }
+]

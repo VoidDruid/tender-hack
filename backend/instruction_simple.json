@@ -1,21 +1,24 @@
 [
+    null,
+    null,
+    null,
+    null,
     {
         "name": "products",
         "type": "array",
         "fields": [
             {
-                "name": "name",
+                "name": "number",
                 "index": 0
             },
             {
-                "name": "description",
+                "name": "code",
+                "index": 1
+            },
+            {
+                "name": "name",
                 "index": 1
             }
         ]
-    },
-    {
-        "name": "price",
-        "type": "single",
-        "eval": "float(row[2])"
     }
 ]

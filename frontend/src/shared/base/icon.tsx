@@ -1,12 +1,10 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-
 //regular
 import { faSquare } from '@fortawesome/free-regular-svg-icons/faSquare';
 import { faCheckSquare } from '@fortawesome/free-regular-svg-icons/faCheckSquare';
-
 //solid
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons/faAngleRight';
-
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -15,10 +13,11 @@ library.add(
   faSquare,
   faCheckSquare,
   //solid
-  faAngleRight
+  faAngleRight,
+  faArrowRight
 );
 
-export type ImportedIcon = 'check-square' | 'square' | 'angle-right' | 'google' | 'vk' | 'twitter';
+export type ImportedIcon = 'check-square' | 'square' | 'angle-right' | 'google' | 'vk' | 'twitter' | 'arrow-right';
 
 export interface Props extends React.HTMLAttributes<any> {
   className?: string;

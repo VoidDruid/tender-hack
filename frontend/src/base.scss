@@ -7,3 +7,9 @@ $base-font: 'Roboto';
 h1 {
   font-family: $base-font;
 }
+
+#root,
+html,
+body {
+  height: 100%;
+}

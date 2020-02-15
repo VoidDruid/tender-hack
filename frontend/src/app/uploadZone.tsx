@@ -1,10 +1,12 @@
 import React from 'react';
 import { Line } from 'shared/base/line';
 
+import './uploadZone.scss';
+
 export const UploadZone: React.FC = () => {
   return (
-    <Line>
-      <h1>Upload zone</h1>
+    <Line className="uploadZone">
+      <Line className="card container" justifyContent="around" alignItems="center"></Line>
     </Line>
   );
 };

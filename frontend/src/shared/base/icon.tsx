@@ -5,6 +5,7 @@ import { faCheckSquare } from '@fortawesome/free-regular-svg-icons/faCheckSquare
 //solid
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons/faAngleRight';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
+import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,6 +14,7 @@ library.add(
   //regular
   faSquare,
   faCheckSquare,
+  faUpload,
   //solid
   faAngleRight,
   faArrowRight,
@@ -27,6 +29,8 @@ export type ImportedIcon =
   | 'vk'
   | 'twitter'
   | 'arrow-right'
+  | 'upload'
+  | 'arrow-right'
   | 'times';
 
 export interface Props extends React.HTMLAttributes<any> {
@@ -37,5 +41,5 @@ export interface Props extends React.HTMLAttributes<any> {
 }
 
 export const Icon: React.FC<Props> = ({ prefix = 'fas', name, spin, className, ...other }) => {
-  return <FontAwesomeIcon icon={[prefix, name]} spin={spin} {...other}></FontAwesomeIcon>;
+  return <FontAwesomeIcon className={className} icon={[prefix, name]} spin={spin} {...other}></FontAwesomeIcon>;
 };

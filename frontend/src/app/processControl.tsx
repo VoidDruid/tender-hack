@@ -19,7 +19,7 @@ export const ProcessControl: React.FC = () => {
           <TextBoxField name="" value={name} onChange={(value: string) => setName(value)}></TextBoxField>
           <Button
             className="button"
-            buttonType="light"
+            buttonType='primary'
             label="Add"
             onClick={() => {
               if (name && name != '') {

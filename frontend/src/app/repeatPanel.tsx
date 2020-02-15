@@ -28,9 +28,9 @@ export const RepeatPanel: React.FC<Props> = ({ actionType, action, mod = undefin
   if (item && item.isError)
     return (
       <Line vertical justifyContent="center" alignItems="center">
-        <div>Could not load data from the server.</div>
-        <div>Press repeat button to reload data.</div>
-        <Button buttonType='primary' onClick={action} label='Repeat'>
+        <div>Не удалось загрузить данные с сервера.</div>
+        <div>Нажмите кнопку повтора, чтобы перезагрузить данные.</div>
+        <Button buttonType='primary' onClick={action} label='Повторить'>
         </Button>
       </Line>
     );

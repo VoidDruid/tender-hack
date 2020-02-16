@@ -29,7 +29,8 @@ def getter(attribute: str):
 FILLED_TRANSFERED_FLAG = '_is_filled_transfered'
 OUTPUT_FIELD_KEYS = '_outputs'
 TO_REMOVE = '_to_remove'
-SYSTEM_FIELDS = [FILLED_TRANSFERED_FLAG, OUTPUT_FIELD_KEYS, TO_REMOVE]
+IS_COLLECTING_MULTIPLES = '_is_collecting_mult'
+SYSTEM_FIELDS = [FILLED_TRANSFERED_FLAG, OUTPUT_FIELD_KEYS, TO_REMOVE, IS_COLLECTING_MULTIPLES]
 TRANSFERED_FIELDS = [
     'is_param',
 ]
@@ -61,11 +62,19 @@ TRANSFERED_FIELDS = [
 ]
 
 
+def multiples_satisfied(row, schema):
+    for field in get_fields(schema):
+        if get_is_multiple(field) and not row[get_index(field)]:
+                return False
+    return True
+
+
 def create_check_function(schema):
     def check(row, parsing_context):
         if not schema:
             return False
-        for field in get_fields(schema):
+        fields = get_fields(schema)
+        for field in fields:
             if not get_is_optional(field) and row[get_index(field)] is None:
                 return False
         return True
@@ -105,8 +114,9 @@ def extract(parsing_context, schema):
     entity = deepcopy(parsing_context)
     # TODO: support multiple extraction
     outputs = get_output_keys(entity)
-    for field_name, params in outputs.items():
-        entity[field_name] = build_output_field(params)
+    if outputs:
+        for field_name, params in outputs.items():
+            entity[field_name] = build_output_field(params)
     clear_specified_fields(entity, get_to_remove(entity) or [])
     clear_specified_fields(entity, SYSTEM_FIELDS)
     for field_key in entity:

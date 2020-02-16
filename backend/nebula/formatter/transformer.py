@@ -87,5 +87,5 @@ def offer_transformer(offers: List):
             child.text = str(param[1])        
         res = res + etree.tostring(root, encoding='utf-8', pretty_print=True).decode()
 
-    res = get_header() + get_shop() + "\t\t" + res + "\t</shop>\n</yml_catalog>"
+    res = get_header() + get_shop() + "\n" + res + "\n</shop>\n</yml_catalog>"
     return StreamingResponse(io.BytesIO(res.encode('utf-8')), media_type="text/xml")

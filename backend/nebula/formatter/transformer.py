@@ -24,7 +24,6 @@ mandatory = {
 
 def get_header():
     return """
-<?xml version="1.0" encoding="UTF-8"?>
 <yml_catalog date="2019-11-01 17:22">
 """
 

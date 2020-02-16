@@ -53,7 +53,7 @@ export const OptionsPanel: React.FC<Props> = ({ hideOptions, onAddOptions, heade
           setModel(newModel);
         }}></Checkbox>
       <Line mt="3" vertical>
-        <div>Id</div>
+        <div>Индекс</div>
         <TextBoxField
           name="index"
           value={model.index?.toString() ?? ''}
@@ -63,7 +63,7 @@ export const OptionsPanel: React.FC<Props> = ({ hideOptions, onAddOptions, heade
           }}></TextBoxField>
       </Line>
       <div className="select">
-        <div>Родительский элемент</div>
+        <div>Дочерний элемент</div>
         <SelectField
           value={model.parent}
           options={map}

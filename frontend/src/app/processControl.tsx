@@ -26,7 +26,7 @@ export const ProcessControl: React.FC = () => {
       a.push(model[key]);
     }
     dispatch(saveRulesAsync(a));
-  }, {"offers": model});
+  }, [model]);
 
   const getEntities = useCallback(() => {
     const result: JSX.Element[] = [];

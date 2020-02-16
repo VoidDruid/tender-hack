@@ -8,11 +8,11 @@ export const ProgressControl: React.FC = () => {
   return (
     <Line className="progressControl">
       <Line className="card container" justifyContent="around" alignItems="center">
-        <div>Задание параметров</div>
+        <div className="text-progress">Задание параметров</div>
         <Icon name="arrow-right"></Icon>
-        <div>Загрузка файла</div>
+        <div className="text-progress">Загрузка файла</div>
         <Icon name="arrow-right"></Icon>
-        <div>Выгрузка файла</div>
+        <div className="text-progress">Выгрузка файла</div>
       </Line>
     </Line>
   );

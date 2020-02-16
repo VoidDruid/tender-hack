@@ -12,10 +12,10 @@ from services.dependencies import get_db
 from . import api
 
 
-def load_values_as_array(file: BytesIO) -> List:
+def load_values_as_array(file: BytesIO, worksheet: int = 0) -> List:
     elements = []
     wb = load_workbook(filename=file)
-    active_sheet = wb.active
+    active_sheet = wb.worksheets[worksheet]
     max_row = active_sheet.max_row
     max_col = active_sheet.max_column
 

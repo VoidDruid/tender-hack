@@ -1,5 +1,5 @@
 export interface FieldType {
-  index: string;
+  index: number;
   name: string;
   is_multiple?: boolean;
   parent_of?: string;

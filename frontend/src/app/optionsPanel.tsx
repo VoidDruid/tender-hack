@@ -31,7 +31,7 @@ export const OptionsPanel: React.FC<Props> = ({ hideOptions, onAddOptions, heade
   return (
     <Line vertical className="optionsPanel">
       <Checkbox
-        text="Is multiple"
+        text="Является множественным"
         onChange={(value: boolean) => {
           let newModel = { ...model };
           if (value) {
@@ -42,7 +42,7 @@ export const OptionsPanel: React.FC<Props> = ({ hideOptions, onAddOptions, heade
           setModel(newModel);
         }}></Checkbox>
       <Checkbox
-        text="Is parameter"
+        text="Является параметром"
         onChange={(value: boolean) => {
           let newModel = { ...model };
           if (value) {
@@ -52,18 +52,18 @@ export const OptionsPanel: React.FC<Props> = ({ hideOptions, onAddOptions, heade
           }
           setModel(newModel);
         }}></Checkbox>
-      <Line mt="3">
-        {' '}
+      <Line mt="3" vertical>
+        <div>Id</div>
         <TextBoxField
           name="index"
-          value={model.index}
+          value={model.index?.toString() ?? ''}
           onChange={(value: string) => {
-            const a = !value ? '' : value;
+            const a = !value || isNaN(parseInt(value)) ? 0 : parseInt(value);
             setModel({ ...model, index: a });
           }}></TextBoxField>
       </Line>
       <div className="select">
-        <div>Parent of</div>
+        <div>Родительский элемент</div>
         <SelectField
           value={model.parent}
           options={map}

@@ -1,6 +1,6 @@
 export interface OptionsType {
   isMultiple?: boolean;
   parent?: string;
-  index?: string;
+  index?: number;
   isParameter?: boolean;
 }

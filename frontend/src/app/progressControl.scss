@@ -1,0 +1,28 @@
+.progressControl {
+  width: 100%;
+  padding: 1em;
+  .buttonEntity {
+    margin: 1em;
+    width: 100%;
+    overflow-y: scroll;
+    .saveButton {
+      margin-right: 2em;
+    }
+    .entity {
+      margin-left: 1em;
+      .container {
+        width: 100%;
+        padding: 0.5em;
+        .button {
+          margin-left: 1em;
+        }
+        .addEntityButton {
+          margin-left: 1em;
+        }
+      }
+      .title {
+        font-weight: bolder;
+      }
+    }
+  }
+}

@@ -25,6 +25,15 @@ class HttpWrapper {
       })
     );
   }
+
+  public post<T>(url: string, data: {},  params?: { [key: string]: any }, header?: {}): Observable<T> {
+    return ajax.post(this._getUrl(url, params), data, header).pipe(
+      map(x => x.response),
+      catchError(e => {
+        throw e;
+      })
+    );
+  }
 }
 
 export const http = new HttpWrapper();

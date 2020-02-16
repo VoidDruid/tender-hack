@@ -1,3 +1,9 @@
 import { combineReducers } from 'redux';
+import { loaderReducer } from 'core/loader';
 
-export const rootReducer = combineReducers({});
+import { fileReducer } from './file/reducer';
+
+export const rootReducer = combineReducers({
+    loader: loaderReducer,
+    file: fileReducer
+});

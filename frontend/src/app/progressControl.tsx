@@ -1,10 +1,19 @@
 import React from 'react';
 import { Line } from 'shared/base/line';
+import { Icon } from 'shared/base/icon';
+
+import './progressControl.scss';
 
 export const ProgressControl: React.FC = () => {
   return (
-    <Line>
-      <h1>Progress Control</h1>
+    <Line className="progressControl">
+      <Line className="card container" justifyContent="around" alignItems="center">
+        <div>Задание параметров</div>
+        <Icon name="arrow-right"></Icon>
+        <div>Загрузка файла</div>
+        <Icon name="arrow-right"></Icon>
+        <div>Выгрузка файла</div>
+      </Line>
     </Line>
   );
 };

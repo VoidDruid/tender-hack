@@ -1,12 +1,13 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-
 //regular
 import { faSquare } from '@fortawesome/free-regular-svg-icons/faSquare';
 import { faCheckSquare } from '@fortawesome/free-regular-svg-icons/faCheckSquare';
-
 //solid
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons/faAngleRight';
-
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
+import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -14,11 +15,25 @@ library.add(
   //regular
   faSquare,
   faCheckSquare,
+  faUpload,
   //solid
-  faAngleRight
+  faAngleRight,
+  faArrowRight,
+  faTimes,
+  faAngleDown
 );
 
-export type ImportedIcon = 'check-square' | 'square' | 'angle-right' | 'google' | 'vk' | 'twitter';
+export type ImportedIcon =
+  | 'check-square'
+  | 'square'
+  | 'angle-right'
+  | 'google'
+  | 'vk'
+  | 'twitter'
+  | 'arrow-right'
+  | 'times'
+  | 'upload'
+  | 'angle-down';
 
 export interface Props extends React.HTMLAttributes<any> {
   className?: string;
@@ -28,5 +43,5 @@ export interface Props extends React.HTMLAttributes<any> {
 }
 
 export const Icon: React.FC<Props> = ({ prefix = 'fas', name, spin, className, ...other }) => {
-  return <FontAwesomeIcon icon={[prefix, name]} spin={spin} {...other}></FontAwesomeIcon>;
+  return <FontAwesomeIcon className={className} icon={[prefix, name]} spin={spin} {...other}></FontAwesomeIcon>;
 };

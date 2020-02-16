@@ -9,13 +9,15 @@ export interface ButtonProps extends React.HTMLAttributes<any> {
   icon?: 'vk' | 'google' | 'twitter';
   buttonType: 'light' | 'primary';
   className?: string;
+  onClick?: () => void;
+  disabled?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = ({ label, icon, buttonType, className }) => {
+export const Button: React.FC<ButtonProps> = ({disabled, label, icon, buttonType, className, onClick }) => {
   const classes = classNames('btn', { [`btn-${buttonType}`]: true }, className);
   return (
     <div className="buttons">
-      <button className={classes}>
+      <button disabled={disabled} className={classes} onClick={onClick}>
         <Line>
           <div>{icon ? <Icon name={icon} prefix="fab"></Icon> : null}</div>
           <div>{label ? <div className="label">{label}</div> : null}</div>

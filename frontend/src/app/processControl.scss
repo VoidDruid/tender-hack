@@ -1,0 +1,40 @@
+.processControl {
+  width: 100%;
+  padding: 1em;
+  .buttonEntity {
+    margin: 1em;
+    width: 100%;
+    overflow-y: scroll;
+    .header {
+      font-weight: bolder;
+      margin-bottom: 1em;
+    }
+    .saveButton {
+      margin-right: 2em;
+    }
+    .entity {
+      margin-left: 1em;
+      .container {
+        width: 100%;
+        padding: 0.5em;
+        .button {
+          margin-left: 1em;
+        }
+        .addEntityButton {
+          margin-left: 1em;
+        }
+      }
+      .titlecard {
+        .cross {
+          color: grey;
+          margin-left: 1em;
+          cursor: pointer;
+        }
+        .title {
+          font-weight: bolder;
+          margin-left: 0.35em;
+        }
+      }
+    }
+  }
+}

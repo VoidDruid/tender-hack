@@ -10,13 +10,13 @@ import './app.scss';
 export const App: React.FC = () => {
   return (
     <Line justifyContent="between" className="app">
-      <Line vertical className="leftPanel">
+      <Line className="leftPanel">
+        <ProcessControl />
+      </Line>
+      <Line  vertical className="rightPanel">
         <ProgressControl />
         <UploadZone />
         <DownloadZone />
-      </Line>
-      <Line className="rightPanel">
-        <ProcessControl />
       </Line>
     </Line>
   );

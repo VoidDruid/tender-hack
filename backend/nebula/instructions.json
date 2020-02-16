@@ -1,0 +1,33 @@
+[
+    null,
+    null,
+    null,
+    null,
+    {
+        "name": "offers",
+        "type": "array",
+        "fields": [
+            {
+                "name": "id",
+                "index": 1
+            },
+            {
+                "name": "name",
+                "index": 2
+            },
+            {
+                "name": "description",
+                "index": 4
+            },
+            {
+                "name": "price",
+                "index": 6
+            },
+            {
+                "name": "Страна происхождения",
+                "is_param": true,
+                "index": 9
+            }
+        ]
+    }
+]

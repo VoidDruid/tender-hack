@@ -3,6 +3,7 @@ from starlette.responses import StreamingResponse
 from typing import List
 from lxml import etree
 from pprint import pprint
+from random import randint
 
 from lxml import etree
 
@@ -66,7 +67,8 @@ def offer_transformer(offers: List):
             if offer.get(man, None) is None:
                 offer[man] = {"value": "🤔"}
 
-        root = etree.Element("offer", id=str(offer.get("id")["value"]))
+
+        root = etree.Element("offer", id=str(offer.get("id")["value"]), available="true", bid=str(80))
 
         dimen = offer.get('dimensions', None)
 

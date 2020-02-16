@@ -7,19 +7,20 @@ from pprint import pprint
 from lxml import etree
 
 mandatory = {
-    'id': None,
-    'currencyId': 643,
-    'name': None,
-    'picture': None,
-    'categoryId': None,
-    'beginDate': '3 November 1971',
-    'endDate': '19 January 2038',
-    'price': None,
-    'model': None,
-    'vendor': 'company',
-    'vat': '20',
-    'delivery': False,
+    "id": None,
+    "currencyId": 643,
+    "name": None,
+    "picture": None,
+    "categoryId": None,
+    "beginDate": "3 November 1971",
+    "endDate": "19 January 2038",
+    "price": None,
+    "model": None,
+    "vendor": "company",
+    "vat": "20",
+    "delivery": False,
 }
+
 
 def get_header():
     return """
@@ -27,8 +28,9 @@ def get_header():
 <yml_catalog date="2019-11-01 17:22">
 """
 
+
 def get_shop():
-   return """ 
+    return """ 
     <shop>
         <name>BestSeller</name>
         <company>Tne Best inc.</company>
@@ -46,6 +48,7 @@ def get_shop():
         </delivery-options>
 """
 
+
 def offer_transformer(offers: List):
     res = ""
     k = None
@@ -56,36 +59,38 @@ def offer_transformer(offers: List):
     for offer in offers[k]:
         for man in mandatory:
             if offer.get(man, None) is None:
-                offer[man] = {'value': '🤔'}
+                offer[man] = {"value": "🤔"}
 
-        root = etree.Element('offer', id=str(offer.get('id')['value']))
+        root = etree.Element("offer", id=str(offer.get("id")["value"]))
 
         params = []
         for key, value in offer.items():
-            if key == 'id':
+            if key == "id":
                 continue
-            is_param = value.get('is_param', False)
+            is_param = value.get("is_param", False)
             if is_param:
-                if value['value'] != 'NULL':
-                    params.append((key, value['value']))
+                if value["value"] != "NULL":
+                    params.append((key, value["value"]))
             else:
                 if key in mandatory and (
-                    value['value'] == 'NULL' or value['value'] == '🤔' or value['value'] is None
+                    value["value"] == "NULL"
+                    or value["value"] == "🤔"
+                    or value["value"] is None
                 ):
                     child = etree.SubElement(root, key)
                     default = mandatory[key]
-                    child.text = default if default is not None else '🤔'
-                elif key not in mandatory and value['value'] != 'NULL':
+                    child.text = str(default) if default is not None else "🤔"
+                elif key not in mandatory and value["value"] != "NULL":
                     child = etree.SubElement(root, key)
-                    child.text = str(value['value'])
+                    child.text = str(value["value"])
                 elif key in mandatory:
                     child = etree.SubElement(root, key)
-                    child.text = str(value['value'])
+                    child.text = str(value["value"])
 
         for param in params:
-            child = etree.SubElement(root, 'param', name=param[0])
-            child.text = str(param[1])        
-        res = res + etree.tostring(root, encoding='utf-8', pretty_print=True).decode()
+            child = etree.SubElement(root, "param", name=param[0])
+            child.text = str(param[1])
+        res = res + etree.tostring(root, encoding="utf-8", pretty_print=True).decode()
 
     res = get_header() + get_shop() + "\t\t" + res + "\t</shop>\n</yml_catalog>"
-    return StreamingResponse(io.BytesIO(res.encode('utf-8')), media_type="text/xml")
+    return StreamingResponse(io.BytesIO(res.encode("utf-8")), media_type="text/xml")

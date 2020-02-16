@@ -1,14 +1,16 @@
 from collections import defaultdict
 from copy import deepcopy
 from pprint import pprint
-from .transformer import offer_transformer
+
 from conf import DEBUG
+
+from .transformer import offer_transformer
 
 _print = print
 
 
 def print(*args):  # noqa
-    #return
+    return
     if not DEBUG:
         return
     for obj in args:
@@ -78,12 +80,15 @@ def create_check_function(schema):
     def check(row, parsing_context):
         if not schema:
             return False
+
         fields = get_fields(schema)
         if get_is_collecting_multiples(parsing_context) and multiples_satisfied(row, schema):
             return True
+
         for field in fields:
             if not get_is_optional(field) and row[get_index(field)] is None:
                 return False
+
         return True
 
     return check
@@ -103,6 +108,7 @@ def clear_specified_fields(object, fields_list):
 def build_output_field(params):
     values = params.pop('values')
     method = params.pop('method')
+
     if not method:
         value = str(values)
     if method.endswith('join'):
@@ -110,6 +116,7 @@ def build_output_field(params):
         value = join_around.join([str(value) for value in values])
     if method == 'concat':
         value = ''.join([str(value) for value in values])
+
     result = params.copy()
     result['value'] = value
     return result
@@ -118,11 +125,14 @@ def build_output_field(params):
 def extract(parsing_context, schema):
     if not parsing_context or not schema:
         return None
+
     entity = deepcopy(parsing_context)
+
     outputs = get_output_keys(entity)
     if outputs:
         for field_name, params in outputs.items():
             entity[field_name] = build_output_field(params)
+
     for field in get_fields(schema):
         if not get_is_multiple(field):
             continue
@@ -130,12 +140,16 @@ def extract(parsing_context, schema):
         if not parent_of:
             continue
         field_name = get_name(field)
-        for attribute_name, attribute_value in zip(entity[field_name]['value'], entity[parent_of]['value']):
+        for attribute_name, attribute_value in zip(
+            entity[field_name]['value'], entity[parent_of]['value']
+        ):
             entity[attribute_name] = {'value': attribute_value, 'is_param': True}
+
     clear_specified_fields(entity, get_to_remove(entity) or [])
     clear_specified_fields(entity, SYSTEM_FIELDS)
     for field_key in entity:
         clear_specified_fields(entity[field_key], SYSTEM_FIELDS)
+
     return entity
 
 
@@ -162,12 +176,14 @@ def set_outputs(parsing_context, field, value):
         return
     if OUTPUT_FIELD_KEYS not in parsing_context:
         parsing_context[OUTPUT_FIELD_KEYS] = {}
+
     to = output['to']
     method = output.get('method')
     if to in parsing_context[OUTPUT_FIELD_KEYS]:
         parsing_context[OUTPUT_FIELD_KEYS][to]['values'].append(value)
     else:
         parsing_context[OUTPUT_FIELD_KEYS][to] = {'values': [value], 'method': method}
+
     fill_transfered_fields(parsing_context[OUTPUT_FIELD_KEYS][to], field)
     mark_field_to_remove(parsing_context, field)
 
@@ -198,6 +214,7 @@ def process_row(row: list, schema: dict, parsing_context: dict):
         name = get_name(field)
         value = row[index]
         is_multiple = get_is_multiple(field)
+
         if not is_multiple:
             if name not in parsing_context:
                 parsing_context[name] = {'value': value}
@@ -208,8 +225,10 @@ def process_row(row: list, schema: dict, parsing_context: dict):
                 parsing_context[name]['value'].append(value)
             else:
                 parsing_context[name] = {'value': [value]}
+
         set_outputs(parsing_context, field, value)
         fill_transfered_fields(parsing_context[name], field)
+
     return entity
 
 
@@ -253,9 +272,9 @@ def parse_entities(matrix, instructions):
 
 def format_excel(matrix, instructions):
     if len(instructions) == 0:
-        return None  # what to return?
+        return None
 
     entities = parse_entities(matrix, instructions)
     print(entities)
 
-    return offer_transformer(entities)  # return file
+    return offer_transformer(entities)

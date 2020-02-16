@@ -6,7 +6,7 @@ from fastapi import Depends, File, Header, UploadFile
 from openpyxl import load_workbook
 from pymongo.database import Database
 
-from services.api import OK, Error, responses
+from services.api import Ok, Error, responses
 from services.dependencies import get_db
 
 from . import api
@@ -51,8 +51,7 @@ def save_instructions(id: int, instructions: List, db: Database = Depends(get_db
         )
     else:
         db.insert_one({'user_id': str(id), 'instructions': instructions})
-    print(instructions)
-    return OK(None)
+    return Ok(None)
 
 
 @api.get('/instructions', responses=responses)
@@ -61,4 +60,3 @@ def get_instructions(id: int, db: Database = Depends(get_db)):
         return db.find_one({'user_id': str(id)})['instructions']
     except TypeError:
         return Error('Invalid user id')
-        

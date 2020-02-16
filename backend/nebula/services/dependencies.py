@@ -7,9 +7,8 @@ from conf import DB_URI, db_settings
 
 # FastAPI Dependency
 def get_db():
-    db = None
+    client = None
     try:
-        print(DB_URI)
         client = MongoClient(DB_URI)
         db = client[db_settings.DATABASE_NAME]
         yield db[' clients']

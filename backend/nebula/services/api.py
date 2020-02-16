@@ -5,7 +5,7 @@ from fastapi import APIRouter, FastAPI
 from starlette.responses import UJSONResponse
 
 from conf import DEBUG
-from services.schemas import ErrorResponse
+from services.schemas import ErrorResponse, CorrectResponse
 
 
 def make_app(*args: Any, **kwargs: Any) -> FastAPI:
@@ -28,11 +28,11 @@ class Api(APIRouter):
 
 
 def Error(error: Union[str, Dict, List, Tuple], code: int = 400) -> UJSONResponse:  # noqa
-    return UJSONResponse(status_code=code, content=ErrorResponse(ok=False, error=error).dict())
+    return UJSONResponse(status_code=code, content=ErrorResponse(error=error).dict())
 
 
-def OK(error: Union[str, Dict, List, Tuple], code: int = 200) -> UJSONResponse:  # noqa
-    return UJSONResponse(status_code=code, content=ErrorResponse(ok=True).dict())
+def Ok(info: Union[str, Dict, List, Tuple], code: int = 200) -> UJSONResponse:  # noqa
+    return UJSONResponse(status_code=code, content=CorrectResponse(info=info).dict())
 
 
 PermissionsError = partial(Error, code=403)

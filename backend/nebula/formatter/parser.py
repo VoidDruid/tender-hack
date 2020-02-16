@@ -66,7 +66,7 @@ TRANSFERED_FIELDS = [
 def multiples_satisfied(row, schema):
     for field in get_fields(schema):
         if get_is_multiple(field) and not row[get_index(field)]:
-                return False
+            return False
     return True
 
 

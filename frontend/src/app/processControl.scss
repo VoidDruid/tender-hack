@@ -1,16 +1,21 @@
 .processControl {
   width: 100%;
   padding: 1em;
+  .list-entity {
+    width: 55em;
+    overflow: auto;
+  }
   .buttonEntity {
-    margin: 1em;
+    margin: 1.5em;
     width: 100%;
-    overflow-y: scroll;
     .header {
       font-weight: bolder;
       margin-bottom: 1em;
     }
-    .saveButton {
-      margin-right: 2em;
+    .text-field {
+      .form-group {
+        width: 20em;
+      }
     }
     .entity {
       margin-left: 1em;

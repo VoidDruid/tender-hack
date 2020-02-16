@@ -3,8 +3,9 @@ import classNames from 'classnames';
 
 import { Line } from './line';
 import { Icon } from './icon';
+import { SpaceProps, propsToSpace } from './utils/spaceUtil';
 
-export interface ButtonProps extends React.HTMLAttributes<any> {
+export interface ButtonProps extends SpaceProps, React.HTMLAttributes<any> {
   label?: string;
   icon?: 'vk' | 'google' | 'twitter';
   buttonType: 'light' | 'primary';
@@ -13,8 +14,8 @@ export interface ButtonProps extends React.HTMLAttributes<any> {
   disabled?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = ({disabled, label, icon, buttonType, className, onClick }) => {
-  const classes = classNames('btn', { [`btn-${buttonType}`]: true }, className);
+export const Button: React.FC<ButtonProps> = ({ disabled, label, icon, buttonType, className, onClick, ...other }) => {
+  const classes = classNames('btn', { [`btn-${buttonType}`]: true }, propsToSpace(other), className);
   return (
     <div className="buttons">
       <button disabled={disabled} className={classes} onClick={onClick}>

@@ -4,14 +4,16 @@ import './uploadZone.scss';
 import { Icon } from 'shared/base/icon';
 import { ActionType } from 'data/actionTypes';
 import { Button } from 'shared/base/button';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setFile as setUploadFile } from 'data/file/action';
+import { StoreType } from 'core/store';
 
 import { RepeatPanel } from './repeatPanel';
 
 export const UploadZone: React.FC = () => {
   const dispatch = useDispatch();
   const [upload, setUpload] = useState<boolean>(false);
+  const file = useSelector((state: StoreType) => state.file.file);
 
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setUpload(true);
@@ -35,22 +37,35 @@ export const UploadZone: React.FC = () => {
   }, []);
 
   const uploadFile = useCallback(() => {}, []);
+
   return (
     <RepeatPanel action={uploadFile} actionType={ActionType.FILE_UPLOADFILE}>
       <Line className="uploadZone">
         <Line className="card container upload-container" justifyContent="around" alignItems="center">
-         {upload && ( <div className="spinner-border text-primary" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>)}
-         {!upload&& ( <form encType="multipart/form-data" action="http://spacehub.su/api/format_excel?id=0" method="POST">
-            <Line alignItems="center" justifyContent="center">
-              <Icon className="img-upload" name="upload"></Icon>
-            </Line>
-            <Line alignItems="center" mt="3">
-              <input id="file-input" className="input-upload" type="file" onChange={e => onChange(e)}></input>
-              <label htmlFor="file-input">Выберите файл </label>
-            </Line>
-          </form>)}
+          {upload && (
+            <div className="spinner-border text-primary" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          )}
+          {!upload && (
+            <form encType="multipart/form-data" action="http://spacehub.su/api/format_excel?id=0" method="POST">
+              <Line alignItems="center" justifyContent="center">
+                {file == '' && <Icon className="img-upload" name="upload"></Icon>}
+                {file != '' && <Icon className="img-upload" name="check-circle"></Icon>}
+              </Line>
+              {file == '' && (
+                <Line alignItems="center" mt="3">
+                  <input id="file-input" className="input-upload" type="file" onChange={e => onChange(e)}></input>
+                  <label htmlFor="file-input">Выберите файл </label>
+                </Line>
+              )}
+              {file != '' && (
+                <Line alignItems="center" mt="3">
+                  <label> Файл загружен</label>
+                </Line>
+              )}
+            </form>
+          )}
         </Line>
       </Line>
     </RepeatPanel>

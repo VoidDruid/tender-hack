@@ -10,7 +10,9 @@ import { RepeatPanel } from './repeatPanel';
 export const UploadZone: React.FC = () => {
   const [file, setFile] = useState<string>();
 
-  useMemo(()=>{ console.log(file);},[file]);
+  useMemo(() => {
+    console.log(file);
+  }, [file]);
 
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
@@ -30,17 +32,20 @@ export const UploadZone: React.FC = () => {
     };
   }, []);
 
-  const download = useCallback((file:string) => {
-    if (file) {
-      var element = document.createElement('a');
-      element.setAttribute('href', 'data:text/xml;charset=utf-8,' + encodeURIComponent(file));
-      element.setAttribute('download', 'test.yaml');
-      element.style.display = 'none';
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-    }
-  }, [file]);
+  const download = useCallback(
+    (file: string) => {
+      if (file) {
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/xml;charset=utf-8,' + encodeURIComponent(file));
+        element.setAttribute('download', 'test.yaml');
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+      }
+    },
+    [file]
+  );
 
   const uploadFile = useCallback(() => {}, []);
   return (
@@ -58,7 +63,6 @@ export const UploadZone: React.FC = () => {
           </form>
         </Line>
       </Line>
-      <Button buttonType="primary" onClick={() => download(file)}></Button>
     </RepeatPanel>
   );
 };

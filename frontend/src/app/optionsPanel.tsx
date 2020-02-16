@@ -3,7 +3,7 @@ import { Line } from 'shared/base/line';
 import { Checkbox } from 'shared/base/checkbox';
 import { SelectField } from 'shared/fields/selectField';
 import { OptionsType } from 'data/model';
-
+import { TextBoxField } from 'shared/fields/textBoxField';
 import './optionsPanel.scss';
 
 interface Props {
@@ -41,6 +41,24 @@ export const OptionsPanel: React.FC<Props> = ({ hideOptions, onAddOptions, heade
           }
           setModel(newModel);
         }}></Checkbox>
+      <Checkbox
+        text="Is parameter"
+        onChange={(value: boolean) => {
+          let newModel = { ...model };
+          if (value) {
+            newModel = { ...newModel, isParameter: true };
+          } else {
+            delete newModel.isParameter;
+          }
+          setModel(newModel);
+        }}></Checkbox>
+      <TextBoxField
+        name="index"
+        value={model.index}
+        onChange={(value: string) => {
+          const a = !value ? '' : value;
+          setModel({ ...model, index: a });
+        }}></TextBoxField>
       <div className="select">
         <div>Parent of</div>
         <SelectField

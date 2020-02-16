@@ -9,7 +9,7 @@ export function uploadFile(id: number, file: FormData) {
 }
 
 export function saveRules(data: RuleType[]) {
-  return http.post(baseUrl + '/instructions?id=1', JSON.stringify([...data]));
+  return http.post(baseUrl + '/instructions?id=3', JSON.stringify([...data]));
 }
 
 export function getRules() {

@@ -5,6 +5,10 @@
     margin: 1em;
     width: 100%;
     overflow-y: scroll;
+    .header {
+      font-weight: bolder;
+      margin-bottom: 1em;
+    }
     .saveButton {
       margin-right: 2em;
     }
@@ -20,10 +24,17 @@
           margin-left: 1em;
         }
       }
-      .title {
-        font-weight: bolder;
+      .titlecard {
+        .cross {
+          color: grey;
+          margin-left: 1em;
+          cursor: pointer;
+        }
+        .title {
+          font-weight: bolder;
+          margin-left: 0.35em;
+        }
       }
     }
   }
 }
-

@@ -21,6 +21,12 @@ mandatory = {
     "delivery": False,
 }
 
+nullable = [
+    "NULL",
+    "NONE",
+    "NAN",
+]
+
 
 def get_header():
     return """
@@ -62,24 +68,31 @@ def offer_transformer(offers: List):
 
         root = etree.Element("offer", id=str(offer.get("id")["value"]))
 
+        dimen = offer.get('dimensions', None)
+
+        if dimen:
+            for i in nullable:
+                if i in dimen['value']:
+                    offer['dimensions']['value'] = dimen['value'].replace(i, "0")
+
         params = []
         for key, value in offer.items():
             if key == "id":
                 continue
             is_param = value.get("is_param", False)
             if is_param:
-                if value["value"] != "NULL":
+                if value["value"] not in nullable:
                     params.append((key, value["value"]))
             else:
                 if key in mandatory and (
-                    value["value"] == "NULL"
+                    value["value"] in nullable
                     or value["value"] == "🤔"
                     or value["value"] is None
                 ):
                     child = etree.SubElement(root, key)
                     default = mandatory[key]
                     child.text = str(default) if default is not None else "🤔"
-                elif key not in mandatory and value["value"] != "NULL":
+                elif key not in mandatory and value["value"] not in nullable:
                     child = etree.SubElement(root, key)
                     child.text = str(value["value"])
                 elif key in mandatory:

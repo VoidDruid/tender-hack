@@ -234,38 +234,41 @@ def process_row(row: list, schema: dict, parsing_context: dict):
 
 def parse_entities(matrix, instructions):
     entities = defaultdict(list)
+    
+    try:
+        entity_schemas = to_iterator(instructions)
+        current_schema, check_match = next_entitiy_schema(entity_schemas)
+        parsing_context = {}
 
-    entity_schemas = to_iterator(instructions)
-    current_schema, check_match = next_entitiy_schema(entity_schemas)
-    parsing_context = {}
+        def add(schema, new_entity):
+            if new_entity is not None:
+                entities[get_name(schema)].append(new_entity)
 
-    def add(schema, new_entity):
-        if new_entity is not None:
-            entities[get_name(schema)].append(new_entity)
+        for row in matrix:
+            print('CURRENT SCHEMA: ', current_schema)
+            print('PARSING CONTEXT: ', parsing_context)
 
-    for row in matrix:
+            if not check_match(row, parsing_context):
+                print('SCHEMA MISMATCH')
+                last_schema = current_schema
+                add(current_schema, extract(parsing_context, last_schema))
+                parsing_context.clear()
+                try:
+                    current_schema, check_match = next_entitiy_schema(entity_schemas)
+                except StopIteration:
+                    break
+                if not last_schema:
+                    print('SKIPPING EMPTY SCHEMA')
+                    continue
+
+            add(current_schema, process_row(row, current_schema, parsing_context))
+
         print('CURRENT SCHEMA: ', current_schema)
         print('PARSING CONTEXT: ', parsing_context)
 
-        if not check_match(row, parsing_context):
-            print('SCHEMA MISMATCH')
-            last_schema = current_schema
-            add(current_schema, extract(parsing_context, last_schema))
-            parsing_context.clear()
-            try:
-                current_schema, check_match = next_entitiy_schema(entity_schemas)
-            except StopIteration:
-                break
-            if not last_schema:
-                print('SKIPPING EMPTY SCHEMA')
-                continue
-
-        add(current_schema, process_row(row, current_schema, parsing_context))
-
-    print('CURRENT SCHEMA: ', current_schema)
-    print('PARSING CONTEXT: ', parsing_context)
-
-    add(current_schema, extract(parsing_context, current_schema))
+        add(current_schema, extract(parsing_context, current_schema))
+    except Exception:
+        pass
 
     return entities
 

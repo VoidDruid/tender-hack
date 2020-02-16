@@ -1,13 +1,14 @@
 from collections import defaultdict
 from copy import deepcopy
 from pprint import pprint
-
+from .transformer import offer_transformer
 from conf import DEBUG
 
 _print = print
 
 
 def print(*args):  # noqa
+    return
     if not DEBUG:
         return
     for obj in args:
@@ -236,4 +237,4 @@ def format_excel(matrix, instructions):
     entities = parse_entities(matrix, instructions)
     print(entities)
 
-    return None  # return file
+    return offer_transformer(entities)  # return file

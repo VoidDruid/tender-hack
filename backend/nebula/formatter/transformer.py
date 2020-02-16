@@ -1,6 +1,9 @@
+import io
+from starlette.responses import StreamingResponse
 from typing import List
 from lxml import etree
 from pprint import pprint
+
 mandatory = ['id', 'currencyId', 'name', 'picture', 'categoryId', 'beginDate', 'endDate', 'price', 'model', 'vendor', 'vat', 'delivery']
 
 elements = [{'dimensions': {'value': 'NULLxNULLxNULL'},
@@ -384,9 +387,35 @@ elements = [{'dimensions': {'value': 'NULLxNULLxNULL'},
 'value': 'NULL'},
 'Цвет': {'is_param': True, 'value': 'NULL'}}]
 
+def get_header():
+    return """
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog date="2019-11-01 17:22">
+"""
+
+def get_shop():
+   return """ 
+    <shop>
+        <name>BestSeller</name>
+        <company>Tne Best inc.</company>
+        <url>http://best.seller.ru</url>
+        <currencies>
+            <currency id="RUR" rate="1"/>
+            <currency id="USD" rate="60"/>
+        </currencies>
+        <categories>
+            <category id="1">Бытовая техника</category>
+            <category id="10" parentId="1">Мелкая техника для кухни</category>
+        </categories>
+        <delivery-options>
+            <option cost="200" days="1"/>
+        </delivery-options>
+"""
 
 def offer_transformer(offers: List):
-    for offer in offers:
+    res = ""
+    print(offers)
+    for offer in offers['offers']:
         for man in mandatory:
             if offer.get(man, None) is None:
                 offer[man] = {'value': '🤔'}
@@ -415,7 +444,7 @@ def offer_transformer(offers: List):
         for param in params:
             child = etree.SubElement(root, "param", name=param[0])
             child.text = str(param[1])
-        print(etree.tostring(root, encoding='utf-8', pretty_print=True).decode())
-
-offer_transformer(elements)
-
+        
+        res = res + etree.tostring(root, encoding='utf-8', pretty_print=True).decode()
+    res = get_header() + get_shop() + "\t\t" + res + "\t</shop>\n</yml_catalog>"
+    return StreamingResponse(io.BytesIO(res.encode('utf-8')), media_type="text/xml")

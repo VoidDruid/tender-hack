@@ -61,3 +61,4 @@ def get_instructions(id: int, db: Database = Depends(get_db)):
         return db.find_one({'user_id': str(id)})['instructions']
     except TypeError:
         return Error('Invalid user id')
+        

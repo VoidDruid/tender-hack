@@ -1,7 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
 
-interface Props {
+import { SpaceProps, propsToSpace } from './utils/spaceUtil';
+
+interface Props extends SpaceProps {
   tag?: React.ElementType;
   className?: string;
   vertical?: boolean;
@@ -29,6 +31,7 @@ export const Line: React.FC<Props> = ({
       [`align-items-md-${alignItems}`]: alignItems != null,
       'flex-md-wrap': wrap
     },
+    propsToSpace(other),
     className
   );
   return (

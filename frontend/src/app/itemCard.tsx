@@ -16,7 +16,7 @@ interface Props {
 export const ItemCard: React.FC<Props> = ({ onDelete, children, onAddOptions, headers, originalKey }) => {
   const [showTip, setShowTip] = useState(true);
   return (
-    <Line className="card itemCard" justifyContent="between" alignItems="center">
+    <Line className="card itemCard" justifyContent="between" alignItems="start">
       <Line vertical className="content">
         <div className="children">{children}</div>
         {showTip && (

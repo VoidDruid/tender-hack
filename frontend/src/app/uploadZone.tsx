@@ -13,26 +13,47 @@ export const UploadZone: React.FC = () => {
   const dispatch = useDispatch();
 
   const [typeFile, setTypeFile] = useState<string>();
-  const [file, setFile] = useState<File>();
+  const [file, setFile] = useState<string>();
 
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const formData = new FormData();
+  
     console.log('upload files');
     setTypeFile(e.target.files[0].name.split('.')[1]);
-    setFile(e.target.files[0]);
-    uploadFile();
+    const reader = new FileReader();
+    reader.readAsBinaryString(e.target.files[0]);
+
+    let strFile ='';
+    var blob = new Blob([e.target.files[0]], { type: "text/plain"});
+const form = new FormData();
+form.append('file', e.target.files[0]);
+    reader.onload = e => {
+      //contenttype header multiplt from data
+      console.log(e.target.result.toString());
+      strFile = e.target.result.toString();
+      setFile(e.target.result.toString());
+      //dispatch(uploadFileAsync({id:0, file: formData}));
+      var request = new XMLHttpRequest();
+      request.open('POST', "http://spacehub.su/api/format_excel?id=1");
+      request.setRequestHeader('contentType', 'multipart/form-data');
+      request.send(formData);
+    };
+  
+
+    //uploadFile();
   }, []);
 
   const uploadFile=useCallback(()=>{
-    dispatch(uploadFileAsync({typeFile: typeFile, file: file}));
+    dispatch(uploadFileAsync({id:0, file: file}));
   },[]);
     
   return (
     <RepeatPanel action={uploadFile} actionType={ActionType.FILE_UPLOADFILE}>
     <Line className="uploadZone">
       <Line className="card container upload-container" justifyContent="around" alignItems="center">
-        <form>
+        <form encType="multipart/form-data" action="http://spacehub.su/api/format_excel?id=0" method='POST'>
          <Line alignItems='center' justifyContent='center'> <Icon className="img-upload" name="upload"></Icon></Line>
-          <Line alignItems='center'>
+          <Line alignItems='center' mt='3'>
             <input id="file-input" className="input-upload" type="file" onChange={e => onChange(e)}></input>
             <label htmlFor="file-input">Выберите файл  </label>
           </Line>

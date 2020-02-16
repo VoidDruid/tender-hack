@@ -13,7 +13,7 @@ export const App: React.FC = () => {
       <Line className="leftPanel">
         <ProcessControl />
       </Line>
-      <Line vertical className="rightPanel">
+      <Line  vertical className="rightPanel">
         <ProgressControl />
         <UploadZone />
         <DownloadZone />

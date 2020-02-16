@@ -1,10 +1,11 @@
 import { http } from 'core/http';
 import { RuleType } from 'data/file/models';
 
+
 const baseUrl = 'http://spacehub.su/api';
 
-export function uploadFile(typeFile: string, file: File) {
-  return http.post(baseUrl + '/file', { typeFile, file });
+export function uploadFile(id: number, file: any) {
+  return http.post(baseUrl + '/format_excel', { file }, {id},{ 'contentType': 'multipart/form-data' });
 }
 
 export function saveRules(data: RuleType[]) {

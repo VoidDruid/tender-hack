@@ -6,7 +6,7 @@ import { uploadFile, saveRules, getRules } from './api';
 import { uploadFileAsync, saveRulesAsync, getRulesAsync } from './action';
 
 const uploadFileEpic = createEpic(uploadFileAsync, data => {
-  return uploadFile(data.typeFile, data.file).pipe(ignoreElements());
+  return uploadFile(data.id, data.file).pipe(ignoreElements());
 });
 
 const saveRulesEpic = createEpic(saveRulesAsync, data => {

@@ -27,7 +27,7 @@ export const ProcessControl: React.FC = () => {
     dispatch(saveRulesAsync(a));
   }, [model]);
 
-  const getEntities = useCallback(() => {
+ const getEntities = useCallback(() => {
     const result: JSX.Element[] = [];
     for (const key in model) {
       result.push(
@@ -42,6 +42,8 @@ export const ProcessControl: React.FC = () => {
                 if (options.isMultiple) res.is_multiple = options.isMultiple;
                 if (options.parent) res.parent_of = options.parent;
                 arr.push(res);
+
+
               }
               let i = 0;
               arr.forEach(x => {

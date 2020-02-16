@@ -1,12 +1,16 @@
+@import '../constants.scss';
+
 .optionsPanel {
   width: 100%;
   .hideTip {
+    margin-top: 1em;
     cursor: pointer;
   }
-  .hideTip:hover {
-    color: blue;
+  .hideTip:hover{
+    color: $red;
   }
   .select {
+    margin-top: 1em;
     width: 100%;
   }
 }

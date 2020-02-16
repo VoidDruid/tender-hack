@@ -7,16 +7,16 @@
   }
   .upload-container {
     width: 42em;
-    height: 10em;
+    height: 20em;
     outline: 2px dashed #5d5d5d;
     outline-offset: -12px;
     background-color: #ffffff;
     color: #1f3c44;
     .img-upload {
-      font-size: 5em;
+      font-size: 7em;
       margin-top: 0.1em;
       user-select: none;
-      opacity: 0.5;
+      opacity: 0.2;
     }
     label {
       font-weight: bold;

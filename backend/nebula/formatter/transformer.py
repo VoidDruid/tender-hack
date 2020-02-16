@@ -414,8 +414,12 @@ def get_shop():
 
 def offer_transformer(offers: List):
     res = ""
-    print(offers)
-    for offer in offers['offers']:
+    k = None
+    for key in offers:
+        k = key
+        break
+
+    for offer in offers[k]:
         for man in mandatory:
             if offer.get(man, None) is None:
                 offer[man] = {'value': '🤔'}

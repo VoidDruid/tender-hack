@@ -35,22 +35,27 @@ export const UploadZone: React.FC = () => {
   }, []);
 
   const uploadFile = useCallback(() => {}, []);
+
   return (
     <RepeatPanel action={uploadFile} actionType={ActionType.FILE_UPLOADFILE}>
       <Line className="uploadZone">
         <Line className="card container upload-container" justifyContent="around" alignItems="center">
-         {upload && ( <div className="spinner-border text-primary" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>)}
-         {!upload&& ( <form encType="multipart/form-data" action="http://spacehub.su/api/format_excel?id=0" method="POST">
-            <Line alignItems="center" justifyContent="center">
-              <Icon className="img-upload" name="upload"></Icon>
-            </Line>
-            <Line alignItems="center" mt="3">
-              <input id="file-input" className="input-upload" type="file" onChange={e => onChange(e)}></input>
-              <label htmlFor="file-input">Выберите файл </label>
-            </Line>
-          </form>)}
+          {upload && (
+            <div className="spinner-border text-primary" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          )}
+          {!upload && (
+            <form encType="multipart/form-data" action="http://spacehub.su/api/format_excel?id=0" method="POST">
+              <Line alignItems="center" justifyContent="center">
+                <Icon className="img-upload" name="upload"></Icon>
+              </Line>
+              <Line alignItems="center" mt="3">
+                <input id="file-input" className="input-upload" type="file" onChange={e => onChange(e)}></input>
+                <label htmlFor="file-input">Выберите файл </label>
+              </Line>
+            </form>
+          )}
         </Line>
       </Line>
     </RepeatPanel>

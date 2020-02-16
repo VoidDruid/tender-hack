@@ -35,11 +35,13 @@ export const ProcessControl: React.FC = () => {
         <div key={key} className="entity">
           <Line className="titlecard">
             <div className="title">{model[key].name}</div>
-            <div className="cross" onClick={() => {
-              const newModel = {...model};
-              delete newModel[key];
-              setModel(newModel);
-            }}>
+            <div
+              className="cross"
+              onClick={() => {
+                const newModel = { ...model };
+                delete newModel[key];
+                setModel(newModel);
+              }}>
               <Icon name="times"></Icon>
             </div>
           </Line>
@@ -68,24 +70,36 @@ export const ProcessControl: React.FC = () => {
       <Line className="card container">
         <Line justifyContent="between" className="buttonEntity">
           <Line vertical>
-            <h2 className="header">Параметры для парсера</h2>
-            <Line>
-              <TextBoxField name="" value={name} onChange={(value: string) => setName(value)}></TextBoxField>
-              <Button
-                label="Добавить сущность"
-                onClick={() => {
-                  if (name && name != '') {
-                    const newModel = { ...model, [name]: { name, type: 'array', fields: [] } };
-                    setModel(newModel);
-                  }
-                  setName('');
-                }}
-                buttonType="primary"
-                className="addEntityButton"></Button>
+            <Line ml="3">
+              <h4 className="header">Параметры для парсера</h4>
             </Line>
-            {getEntities()}
+            <Line ml="3" className="text-field" justifyContent="between">
+              <Line>
+                {' '}
+                <TextBoxField name="" value={name} onChange={(value: string) => setName(value)}></TextBoxField>
+                <Button
+                  label="Добавить сущность"
+                  onClick={() => {
+                    if (name && name != '') {
+                      const newModel = { ...model, [name]: { name, type: 'array', fields: [] } };
+                      setModel(newModel);
+                    }
+                    setName('');
+                  }}
+                  buttonType="primary"
+                  className="addEntityButton"></Button>
+              </Line>
+              <Button
+                label="Сохранить"
+                ml="5"
+                onClick={onSaveCallback}
+                buttonType="primary"
+                className="saveButton"></Button>
+            </Line>
+            <Line vertical className="list-entity">
+              {getEntities()}
+            </Line>
           </Line>
-          <Button label="Сохранить" onClick={onSaveCallback} buttonType="primary" className="saveButton"></Button>
         </Line>
       </Line>
     </Line>

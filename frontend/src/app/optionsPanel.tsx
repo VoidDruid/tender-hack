@@ -52,13 +52,16 @@ export const OptionsPanel: React.FC<Props> = ({ hideOptions, onAddOptions, heade
           }
           setModel(newModel);
         }}></Checkbox>
-      <TextBoxField
-        name="index"
-        value={model.index}
-        onChange={(value: string) => {
-          const a = !value ? '' : value;
-          setModel({ ...model, index: a });
-        }}></TextBoxField>
+      <Line mt="3">
+        {' '}
+        <TextBoxField
+          name="index"
+          value={model.index}
+          onChange={(value: string) => {
+            const a = !value ? '' : value;
+            setModel({ ...model, index: a });
+          }}></TextBoxField>
+      </Line>
       <div className="select">
         <div>Parent of</div>
         <SelectField

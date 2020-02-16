@@ -8,7 +8,7 @@ _print = print
 
 
 def print(*args):  # noqa
-    return
+    #return
     if not DEBUG:
         return
     for obj in args:
@@ -47,6 +47,8 @@ TRANSFERED_FIELDS = [
     get_output,
     get_to_remove,
     get_output_keys,
+    get_is_collecting_multiples,
+    get_parent_of,
 ) = [
     getter(attr)
     for attr in [
@@ -59,6 +61,8 @@ TRANSFERED_FIELDS = [
         'output',
         TO_REMOVE,
         OUTPUT_FIELD_KEYS,
+        IS_COLLECTING_MULTIPLES,
+        'parent_of',
     ]
 ]
 
@@ -75,6 +79,8 @@ def create_check_function(schema):
         if not schema:
             return False
         fields = get_fields(schema)
+        if get_is_collecting_multiples(parsing_context) and multiples_satisfied(row, schema):
+            return True
         for field in fields:
             if not get_is_optional(field) and row[get_index(field)] is None:
                 return False
@@ -113,11 +119,19 @@ def extract(parsing_context, schema):
     if not parsing_context or not schema:
         return None
     entity = deepcopy(parsing_context)
-    # TODO: support multiple extraction
     outputs = get_output_keys(entity)
     if outputs:
         for field_name, params in outputs.items():
             entity[field_name] = build_output_field(params)
+    for field in get_fields(schema):
+        if not get_is_multiple(field):
+            continue
+        parent_of = get_parent_of(field)
+        if not parent_of:
+            continue
+        field_name = get_name(field)
+        for attribute_name, attribute_value in zip(entity[field_name]['value'], entity[parent_of]['value']):
+            entity[attribute_name] = {'value': attribute_value, 'is_param': True}
     clear_specified_fields(entity, get_to_remove(entity) or [])
     clear_specified_fields(entity, SYSTEM_FIELDS)
     for field_key in entity:
@@ -134,6 +148,14 @@ def fill_transfered_fields(rendered_field, field):
             rendered_field[field_name] = field[field_name]
 
 
+def mark_field_to_remove(parsing_context, field):
+    field_name = get_name(field)
+    if TO_REMOVE in parsing_context and field_name not in get_to_remove(parsing_context):
+        parsing_context[TO_REMOVE].append(get_name(field))
+    else:
+        parsing_context[TO_REMOVE] = [get_name(field)]
+
+
 def set_outputs(parsing_context, field, value):
     output = get_output(field)
     if not output:
@@ -147,10 +169,7 @@ def set_outputs(parsing_context, field, value):
     else:
         parsing_context[OUTPUT_FIELD_KEYS][to] = {'values': [value], 'method': method}
     fill_transfered_fields(parsing_context[OUTPUT_FIELD_KEYS][to], field)
-    if TO_REMOVE in parsing_context:
-        parsing_context[TO_REMOVE].append(get_name(field))
-    else:
-        parsing_context[TO_REMOVE] = [get_name(field)]
+    mark_field_to_remove(parsing_context, field)
 
 
 def process_row(row: list, schema: dict, parsing_context: dict):
@@ -183,6 +202,8 @@ def process_row(row: list, schema: dict, parsing_context: dict):
             if name not in parsing_context:
                 parsing_context[name] = {'value': value}
         else:
+            parsing_context[IS_COLLECTING_MULTIPLES] = True
+            mark_field_to_remove(parsing_context, field)
             if name in parsing_context:
                 parsing_context[name]['value'].append(value)
             else:

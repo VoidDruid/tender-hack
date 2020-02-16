@@ -1,36 +1,48 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { Line } from 'shared/base/line';
 import './uploadZone.scss';
-import { useDispatch } from 'react-redux';
-import { uploadFileAsync } from 'data/file/action';
 import { Icon } from 'shared/base/icon';
 import { ActionType } from 'data/actionTypes';
+import { Button } from 'shared/base/button';
 
 import { RepeatPanel } from './repeatPanel';
 
 export const UploadZone: React.FC = () => {
-  const dispatch = useDispatch();
-
-  const [typeFile, setTypeFile] = useState<string>();
   const [file, setFile] = useState<string>();
+
+  useMemo(()=>{ console.log(file);},[file]);
 
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
     const form = new FormData();
     reader.readAsArrayBuffer(e.target.files[0]);
     form.append('file', e.target.files[0]);
-    reader.onload = e => {
-      var request = new XMLHttpRequest();
-      request.open('POST', 'http://spacehub.su/api/format_excel?id=1');
-      request.setRequestHeader('contentType', 'multipart/form-data');
-      request.send(form);
+
+    var request = new XMLHttpRequest();
+    request.open('POST', 'http://spacehub.su/api/format_excel?id=1');
+    request.setRequestHeader('contentType', 'multipart/form-data');
+    request.send(form);
+    request.onload = function() {
+      if (request.status == 200) {
+        setFile(request.response);
+        console.log('type   ', typeof request.response);
+      }
     };
   }, []);
 
-  const uploadFile = useCallback(() => {
-    //dispatch(uploadFileAsync({id:0, file: file}));
-  }, []);
+  const download = useCallback((file:string) => {
+    if (file) {
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:text/xml;charset=utf-8,' + encodeURIComponent(file));
+      element.setAttribute('download', 'test.yaml');
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+  }, [file]);
 
+  const uploadFile = useCallback(() => {}, []);
   return (
     <RepeatPanel action={uploadFile} actionType={ActionType.FILE_UPLOADFILE}>
       <Line className="uploadZone">
@@ -46,6 +58,7 @@ export const UploadZone: React.FC = () => {
           </form>
         </Line>
       </Line>
+      <Button buttonType="primary" onClick={() => download(file)}></Button>
     </RepeatPanel>
   );
 };
